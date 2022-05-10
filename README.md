@@ -1,2 +1,5 @@
-# automata-trade-transform-repository
-Automata Trade Transform Repository
+# Automata Trade Transform Repository
+
+## Packaging
+`python3 -m build`
+
