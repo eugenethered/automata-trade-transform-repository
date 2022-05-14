@@ -1,4 +1,4 @@
-from utility.json_utility import as_data
+from coreutility.collection.dictionary_utility import as_data
 
 from tradetransformrepo.TradeTransform import TradeTransform
 
