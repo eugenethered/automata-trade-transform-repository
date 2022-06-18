@@ -12,19 +12,19 @@ class TradeTransformRepositoryTestCase(unittest.TestCase):
         options = {
             'REDIS_SERVER_ADDRESS': '192.168.1.90',
             'REDIS_SERVER_PORT': 6379,
-            'TRADE_TRANSFORMATIONS_KEY': 'test:trade:transformations'
+            'TRADE_TRANSFORMATIONS_KEY': 'test:transformation:trade'
         }
         self.cache = RedisCacheHolder(options)
         self.repository = TradeTransformRepository(options)
 
     def tearDown(self):
-        self.cache.delete('test:trade:transformations')
+        self.cache.delete('test:transformation:trade')
 
     def test_should_store_and_retrieve_trade_transform(self):
         trade_transform = TradeTransform('BTC/OTC', {
             'instrument': 'BTCOTC'
         })
-        self.repository.store(trade_transform)
+        self.repository.append(trade_transform)
         stored_trade_transformations = self.repository.retrieve()
         self.assertEqual(trade_transform, stored_trade_transformations[0])
 

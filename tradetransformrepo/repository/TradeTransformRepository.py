@@ -14,7 +14,8 @@ TRADE_TRANSFORMATIONS_KEY = 'TRADE_TRANSFORMATIONS_KEY'
 class TradeTransformRepository:
 
     def __init__(self, options):
-        self.log = logging.getLogger(__name__)
+        self.log = logging.getLogger('TradeTransformRepository')
+        self.log.info('initializing')
         self.options = options
         self.__check_options()
         self.cache = RedisCacheHolder()
@@ -27,11 +28,13 @@ class TradeTransformRepository:
             self.log.warning(f'missing option please provide option {TRADE_TRANSFORMATIONS_KEY}')
             raise MissingOptionError(f'missing option please provide option {TRADE_TRANSFORMATIONS_KEY}')
 
-    def store(self, trade_transform):
-        if type(trade_transform) is TradeTransform:
-            self.__store_overwrite(trade_transform)
-        elif type(trade_transform) is list:
-            self.__store_all(trade_transform)
+    def append(self, transform):
+        self.log.debug(f'appending trade transform:[{transform}]')
+        self.__store_overwrite(transform)
+
+    def store(self, transformations):
+        self.log.debug(f'storing trade transform:[{len(transformations)}]')
+        self.__store_all(transformations)
 
     def __store_overwrite(self, trade_transform: TradeTransform):
         all_trade_transform = self.retrieve()
@@ -52,4 +55,5 @@ class TradeTransformRepository:
         key = self.options[TRADE_TRANSFORMATIONS_KEY]
         raw_entities = self.cache.fetch(key, as_type=list)
         entities = list([deserialize_trade_transform(raw) for raw in raw_entities])
+        self.log.debug(f'retrieving trade transforms:[{len(entities)}]')
         return entities
