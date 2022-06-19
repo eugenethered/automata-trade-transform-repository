@@ -57,3 +57,9 @@ class TradeTransformRepository:
         entities = list([deserialize_trade_transform(raw) for raw in raw_entities])
         self.log.debug(f'retrieving trade transforms:[{len(entities)}]')
         return entities
+
+    def remove(self, trade_transform):
+        trade_transformations = self.retrieve()
+        self.log.debug(f'removing trade transform [{trade_transform}]')
+        trade_transformations_without_deleted = list([tt for tt in trade_transformations if tt != trade_transform])
+        self.store(trade_transformations_without_deleted)
