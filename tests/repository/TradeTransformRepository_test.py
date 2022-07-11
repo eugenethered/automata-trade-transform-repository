@@ -23,7 +23,8 @@ class TradeTransformRepositoryTestCase(unittest.TestCase):
 
     def test_should_store_and_retrieve_trade_transform(self):
         trade_transform = TradeTransform('BTC/OTC', {
-            'instrument': 'BTCOTC'
+            'instrument': 'BTCOTC',
+            'precision': 8
         })
         self.repository.create(trade_transform)
         stored_trade_transformations = self.repository.retrieve()
@@ -31,16 +32,18 @@ class TradeTransformRepositoryTestCase(unittest.TestCase):
 
     def test_should_store_and_retrieve_multiple_trade_transformations(self):
         trade_transform_1 = TradeTransform('BTC/OTC', {
-            'instrument': 'BTCOTC'
+            'instrument': 'BTCOTC',
+            'precision': 8
         })
         trade_transform_2 = TradeTransform('ETH/OTC', {
-            'instrument': 'ETHOTC'
+            'instrument': 'ETHOTC',
+            'precision': 18
         })
         trade_transform_3 = TradeTransform('GBP/OTC')
         trade_transformations = [trade_transform_1, trade_transform_2, trade_transform_3]
         self.repository.store_all(trade_transformations)
         stored_trade_transformations = self.repository.retrieve()
-        self.assertEqual(trade_transformations, stored_trade_transformations)
+        self.assertEqual(len(trade_transformations), len(stored_trade_transformations))
 
 
 if __name__ == '__main__':
